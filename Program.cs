@@ -4,7 +4,6 @@ using Microsoft.IdentityModel.Tokens;
 using plain.Filters;
 using plain.Services;
 using plain.Helpers;
-using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
