@@ -70,7 +70,14 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseExceptionHandler("/error");
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/error");
+}
+else
+{
+    app.UseExceptionHandler("/error-development");
+}
 
 
 app.MapControllerRoute(
