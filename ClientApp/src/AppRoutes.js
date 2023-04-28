@@ -2,6 +2,7 @@ import { Counter } from "./components/Counter";
 import { FetchData } from "./components/FetchData";
 import { Login } from "./components/Login";
 import { Home } from "./components/Home";
+import { List } from "./components/List";
 
 const AppRoutes = [
   {
@@ -19,6 +20,11 @@ const AppRoutes = [
   {
     path: '/login',
     element: <Login />
+  }
+  ,
+  {
+    path: '/list',
+    element: <List />
   }
 ];
 

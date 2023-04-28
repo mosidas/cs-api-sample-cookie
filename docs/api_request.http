@@ -1,0 +1,52 @@
+# react-sample
+
+### get all issue
+GET http://localhost:5185/api/issue
+
+### get issue by id
+GET http://localhost:5185/api/issue/1
+
+### create issue
+POST http://localhost:5185/api/issue
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwNTA2OTViZS1lNDA4LTQ0NjItOTU2OC1kNDBmOTEwNjkxY2UiLCJ1bmlxdWVfbmFtZSI6IjEyMyIsImp0aSI6IjllZmZlYTVhLWU4MjktNDRjNC1hYzFmLTM0YzAxNGI1MTdlYyIsImlhdCI6MTY4MjY2MjcwNiwibmJmIjoxNjgyNjYyNzA2LCJleHAiOjE2ODI2NjI3NjYsImlzcyI6Iklzc3VlciJ9.Y5kXt5TwsgAXrpN_GV2ngaV9HYOIvb0-heOlaYRrgkQ
+Content-Type: application/json
+
+{
+    "issue" :{
+        "id": 11,
+        "title": "foo",
+        "description": "bar",
+        "priority" : 2,
+        "status" : 1,
+        "assignee" : "foo",
+        "createdAt" : "2023-04-30T00:00:00.000Z",
+        "deadline" : "2023-05-30T00:00:00.000Z"
+    }
+}
+
+### update issue
+PUT http://localhost:5185/api/issue/11
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwNTA2OTViZS1lNDA4LTQ0NjItOTU2OC1kNDBmOTEwNjkxY2UiLCJ1bmlxdWVfbmFtZSI6IjEyMyIsImp0aSI6IjllZmZlYTVhLWU4MjktNDRjNC1hYzFmLTM0YzAxNGI1MTdlYyIsImlhdCI6MTY4MjY2MjcwNiwibmJmIjoxNjgyNjYyNzA2LCJleHAiOjE2ODI2NjI3NjYsImlzcyI6Iklzc3VlciJ9.Y5kXt5TwsgAXrpN_GV2ngaV9HYOIvb0-heOlaYRrgkQ
+Content-Type: application/json
+
+{
+    "issue" :{
+        "id": 11,
+        "title": "foo",
+        "description": "bar2",
+        "priority" : 2,
+        "status" : 1,
+        "assignee" : "foo",
+        "createdAt" : "2023-04-30T00:00:00.000Z",
+        "deadline" : "2023-05-30T00:00:00.000Z"
+    }
+}
+
+### login
+POST http://localhost:5185/api/account/login
+Content-Type: application/json
+
+{
+    "id": 123,
+    "password": "bar"
+}

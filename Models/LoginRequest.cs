@@ -1,7 +1,18 @@
 namespace plain.Models;
 
 public class LoginRequest
+{
+    public int Id { get; set; }
+    public string Password { get; set; }
+
+    public LoginRequest(int id, string password)
     {
-        public string? Email { get; set; }
-        public string? Password { get; set; }
+        Id = id;
+        Password = password;
     }
+
+    public string ToText()
+    {
+        return $"Id: {Id}, Password: {Password}";
+    }
+}

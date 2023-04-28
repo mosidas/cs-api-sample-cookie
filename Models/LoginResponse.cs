@@ -2,12 +2,10 @@ namespace plain.Models;
 
 public class LoginResponse
 {
-    public string Status { get; set; }
-    public string Message { get; set; }
+    public string AccessToken { get; set;}
 
-    public LoginResponse(string status, string message)
+    public LoginResponse(string accessToken)
     {
-        Status = status;
-        Message = message;
+        AccessToken = accessToken;
     }
 }
