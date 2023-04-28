@@ -8,7 +8,7 @@ GET http://localhost:5185/api/issue/1
 
 ### create issue
 POST http://localhost:5185/api/issue
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwZDAwYmM4NS03NTVkLTQ1MWMtYjg4MC1mNGFiNDFjZjU5NWQiLCJ1bmlxdWVfbmFtZSI6IjEyMyIsImp0aSI6IjYyMTY5YTIxLWU4ZDktNDBlZC1hNDA0LTRlNTU3NjVjMzA3OCIsImlhdCI6MTY4MjY2Njc1MywibmJmIjoxNjgyNjY2NzUzLCJleHAiOjE2ODI2NjY4MTMsImlzcyI6Iklzc3VlciJ9.KjiaFjBf16O3JQ47ruN6w1fGd2zw2RijAERt9p_GdF8
+Authorization: Bearer {}
 Content-Type: application/json
 
 {
@@ -26,7 +26,7 @@ Content-Type: application/json
 
 ### update issue
 PUT http://localhost:5185/api/issue/11
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwNTA2OTViZS1lNDA4LTQ0NjItOTU2OC1kNDBmOTEwNjkxY2UiLCJ1bmlxdWVfbmFtZSI6IjEyMyIsImp0aSI6IjllZmZlYTVhLWU4MjktNDRjNC1hYzFmLTM0YzAxNGI1MTdlYyIsImlhdCI6MTY4MjY2MjcwNiwibmJmIjoxNjgyNjYyNzA2LCJleHAiOjE2ODI2NjI3NjYsImlzcyI6Iklzc3VlciJ9.Y5kXt5TwsgAXrpN_GV2ngaV9HYOIvb0-heOlaYRrgkQ
+Authorization: Bearer {}
 Content-Type: application/json
 
 {
