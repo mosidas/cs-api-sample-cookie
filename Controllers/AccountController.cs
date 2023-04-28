@@ -56,12 +56,13 @@ public class AccountController : ControllerBase
             return BadRequest(new {message = "Request body is null."});
         }
         // TODO: ユーザー認証
+        throw new ArgumentException("hoge");
 
-        var userId = Guid.NewGuid().ToString();
-        var userName = request.Id.ToString();
+        // var userId = Guid.NewGuid().ToString();
+        // var userName = request.Id.ToString();
 
-        var token = _jwtHelper.GenerateJwtToken(userId.ToString(), userName);
+        // var token = _jwtHelper.GenerateJwtToken(userId.ToString(), userName);
 
-        return Ok(new LoginResponse(token));
+        // return Ok(new LoginResponse(token));
     }
 }
