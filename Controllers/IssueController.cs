@@ -80,11 +80,6 @@ public class IssueController : ControllerBase
     [Authorize]
     public ActionResult<IssueResponce> Post(IssueRequest issue)
     {
-        if (issue.Issue == null)
-        {
-            return BadRequest(new IssueResponce(new List<Issue>(), "Request body is null."));
-        }
-
         var newIssue = _issueRepository.Add(issue.Issue);
         if (newIssue == null)
         {
@@ -98,6 +93,7 @@ public class IssueController : ControllerBase
 
     /// <summary>
     /// issueを更新する。
+    /// PUT: api/issue/{id}
     /// </summary>
     /// <param name="id"></param>
     /// <param name="issue"></param>
@@ -111,11 +107,6 @@ public class IssueController : ControllerBase
     [Authorize]
     public ActionResult<IssueResponce> Put(int id, [FromBody] IssueRequest issue)
     {
-        if (issue.Issue == null)
-        {
-            return BadRequest(new IssueResponce(new List<Issue>(), "Request body is null."));
-        }
-
         var ret = _issueRepository.Update(issue.Issue);
         if (!ret)
         {
@@ -123,5 +114,29 @@ public class IssueController : ControllerBase
         }
 
         return Ok(new IssueResponce(new List<Issue>() { issue.Issue }));
+    }
+
+
+    /// <summary>
+    /// issueを削除する。
+    /// DELETE: api/issue/{id}
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    /// <response code="204">成功</response>
+    /// <response code="401">認証エラー</response>
+    /// <response code="404">指定したIDのissueは存在しない</response>
+    /// <response code="500">失敗</response>
+    [HttpDelete("{id}")]
+    [Authorize]
+    public ActionResult<IssueResponce> Delete(int id)
+    {
+        var ret = _issueRepository.Delete(id);
+        if (!ret)
+        {
+            return NotFound(new IssueResponce(new List<Issue>(), "Not found."));
+        }
+
+        return NoContent();
     }
 }

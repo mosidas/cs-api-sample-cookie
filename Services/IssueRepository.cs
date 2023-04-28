@@ -3,31 +3,43 @@ namespace plain.Services;
 using plain.Entities;
 
 /// <summary>
-/// 案件のリポジトリー
+/// issueのリポジトリー
 /// </summary>
 public interface IIssueRepository
 {
     /// <summary>
-    /// 全ての案件を取得する。
+    /// 全てのissueを取得する。
     /// </summary>
-    /// <returns>案件のリスト</returns>
+    /// <returns>issueのリスト</returns>
     IEnumerable<Issue> GetAll();
 
     /// <summary>
-    /// 指定したIDの案件を取得する。
+    /// 指定したIDのissueを取得する。
     /// </summary>
-    /// <param name="id">案件のID</param>
-    /// <returns>案件</returns>
+    /// <param name="id">issueのID</param>
+    /// <returns>issue</returns>
     Issue? Get(int id);
 
     /// <summary>
-    /// 案件を追加する。
+    /// issueを追加する。
     /// </summary>
-    /// <param name="issue">案件</param>
-    /// <returns>追加した案件</returns>
+    /// <param name="issue">issue</param>
+    /// <returns>追加したissue</returns>
     Issue? Add(Issue issue);
 
+    /// <summary>
+    /// issueを更新する。
+    /// </summary>
+    /// <param name="issue"></param>
+    /// <returns>更新したかどうか</returns>
     bool Update(Issue issue);
+
+    /// <summary>
+    /// issueを削除する。
+    /// </summary>
+    /// <param name="id">issueのID</param>
+    /// <returns>削除したかどうか</returns>
+    bool Delete(int id);
 }
 
 public class IssueRepository : IIssueRepository
@@ -83,6 +95,17 @@ public class IssueRepository : IIssueRepository
         target.CreatedAt = issue.CreatedAt;
         target.Deadline = issue.Deadline;
 
+        return true;
+    }
+
+    public bool Delete(int id)
+    {
+        var target = _issues.FirstOrDefault(x => x.Id == id);
+        if (target == null)
+        {
+            return false;
+        }
+        _issues.Remove(target);
         return true;
     }
 }

@@ -43,6 +43,8 @@
 - JWT。
   - 参考: https://jasonwatmore.com/react-18-authentication-with-net-6-aspnet-core-jwt-api
   - [翻訳(途中まで)](dotnet6.0_JWT_Authentication_Tutorial_with_Example_API.md)
+  - https://zukucode.com/2021/04/aspnet-jwt-auth.html
+  - https://jasonwatmore.com/post/2021/12/14/net-6-jwt-authentication-tutorial-with-example-api#jwt-middleware-cs
 
 ## ロギングのやり方
 
@@ -50,11 +52,25 @@
 
 ## コントローラーのいい感じの書き方
 
+### 例外処理
+
+- https://learn.microsoft.com/ja-jp/aspnet/web-api/overview/error-handling/exception-handling
+- https://learn.microsoft.com/ja-jp/aspnet/core/web-api/handle-errors?view=aspnetcore-7.0
+
+### swagger
+
+- https://blog.beachside.dev/entry/2021/01/22/123000
+
 ## REST APIの設計
 
 - RESTfulにしたい。
   - https://jasonwatmore.com/post/2021/05/25/net-5-simple-api-for-authentication-registration-and-user-management
   - [翻訳(途中まで)](simple_API_for_authentication_registration_and_user_management.md)
+  - https://neos21.net/tech/design/restful-web-api.html
+- status code
+  - https://www.moesif.com/blog/technical/api-design/Which-HTTP-Status-Code-To-Use-For-Every-CRUD-App/
+  - https://restfulapi.net/http-status-codes/
+  - https://qiita.com/NagaokaKenichi/items/eb85b5fbb719d60c6627
 
 ## github actions
 
