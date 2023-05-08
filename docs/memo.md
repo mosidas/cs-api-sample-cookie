@@ -19,6 +19,74 @@
 
 - 参考: [microsoft](https://learn.microsoft.com/ja-jp/aspnet/core/fundamentals/middleware/?view=aspnetcore-7.0)
 
+
+![](images/2023-05-08-17-37-48.png)
+
+- Run, Use, Map の3つのメソッドを使ってパイプラインを構築する。
+
+#### Runメソッド
+
+- パイプラインの終端となるメソッド。複数のRunメソッドを書いても、最初のRunメソッドしか実行されない。
+```cs
+app.Run(async context =>
+{
+  await context.Response.WriteAsync("Hello, World!");
+});
+
+app.Run(async context =>
+{
+  // 以下の部分は実行されない。
+  await context.Response.WriteAsync("Hello, Again");
+});
+```
+
+
+#### Useメソッド
+
+- パイプラインチェーンに処理を追加する。`next.Invoke();`と書くと、後続のミドルウェアを呼び出すことができる。
+```cs
+// 以下のように書くと、Hello(1) -> Hello(2) -> Hello(3) の順番で実行される。
+app.Use(async (context, next) =>
+{
+    await context.Response.WriteAsync("Hello(1)");
+    // 後続のミドルウェアを呼び出す
+    await next.Invoke();
+    // 後続のミドルウェアの処理が終わった後に実行される
+    await context.Response.WriteAsync("Hello(3)");
+});
+
+app.Run(async context =>
+{
+    await context.Response.WriteAsync("Hello(2)");
+});
+```
+
+#### Mapメソッド
+
+- リクエストで受けたURLのパスに応じて処理を分岐させる。
+```cs
+// 以下のように書くと、/hello にアクセスしたときは hello.Run が実行され、/world にアクセスしたときは world.Run が実行される。
+app.Map("/hello", hello => {
+    hello.Run(async context => {
+        await context.Response.WriteAsync("This is hello page.");
+    });
+});
+
+app.Map("/world", world => {
+    world.Run(async context => {
+        await context.Response.WriteAsync("This is world page.");
+    });
+});
+```
+
+
+#### 標準ミドルウェア
+
+- 参照: https://docs.microsoft.com/ja-jp/aspnet/core/fundamentals/middleware/?view=aspnetcore-7.0#built-in-middleware
+- UseAuthorization
+- UseExceptionHandler
+- UseStaticFiles
+
 ### Filter
 
 - 参考: [microsoft](https://learn.microsoft.com/en-us/aspnet/core/mvc/controllers/filters?view=aspnetcore-7.0)
@@ -37,6 +105,10 @@
 #### ActionFilter
 
 - null
+
+### DIコンテナ
+
+- https://eiken7.hatenablog.com/entry/2020/12/28/144744
 
 ## 認証認可のやり方
 
