@@ -17,15 +17,18 @@ public class IssueController : ControllerBase
     private readonly ILogger<IssueController> _logger;
     private readonly IIssueRepository _issueRepository;
 
+    private readonly IConfiguration _configuration;
+
     /// <summary>
     /// コンストラクター
     /// </summary>
     /// <param name="logger"></param>
     /// <param name="issueRepository"></param>
-    public IssueController(ILogger<IssueController> logger, IIssueRepository issueRepository)
+    public IssueController(ILogger<IssueController> logger, IIssueRepository issueRepository, IConfiguration configuration)
     {
         _logger = logger;
         _issueRepository = issueRepository;
+        _configuration = configuration;
     }
 
     /// <summary>
@@ -39,6 +42,9 @@ public class IssueController : ControllerBase
     public ActionResult<IssueResponce> Get()
     {
         var issues = new IssueResponce(_issueRepository.GetAll());
+
+        var str = _configuration["super-secret-key"] ?? "null";
+        _logger.LogInformation($"super-secret-key: {str}");
 
         return Ok(issues);
     }
