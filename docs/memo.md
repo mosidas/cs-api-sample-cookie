@@ -41,6 +41,8 @@ dotnet user-secrets init
 - 設定(ローカル環境)
 ```bash
 dotnet user-secrets set "super-secret-key" "hoge"
+dotnet user-secrets set "SQLAZURECONNSTR_super-secret-key" "foobar"
+
 ```
 - 設定(Azure環境)
   - App Service -> 構成 -> アプリケーション設定 から「新しいアプリケーション設定」で設定可能。

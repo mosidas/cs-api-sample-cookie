@@ -48,7 +48,11 @@ public class IssueController : ControllerBase
         var issues = new IssueResponce(_issueRepository.GetAll());
 
         var str = _configuration["super-secret-key"] ?? "null";
+        var sec = _configuration.GetConnectionString("super-secret-key") ?? "null";
+        //var sec = _configuration["SQLAZURECONNSTR_super-secret-key"] ?? "null";
+        //_configuration.GetChildren().ToList().ForEach(x => issues.Message += $"key: {x.Key} value: {x.Value}");
         _logger.LogInformation($"super-secret-key: {str}");
+        issues.Message = $"super-secret-key: {str} SQLAZURECONNSTR_super-secret-key: {sec}";
 
         return Ok(issues);
     }
