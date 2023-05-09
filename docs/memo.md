@@ -8,6 +8,50 @@
   - ライブラリなどの管理
   - 例: `dotnet tool install dotnet-ef`
 
+## セキュリティ
+
+
+
+
+### 秘密文字列の管理
+
+- https://qiita.com/tnishiki/items/0c3e73ed28a66591d676
+- https://github.com/MicrosoftDocs/azure-docs.ja-jp/blob/master/articles/app-service/configure-common.md
+- https://qiita.com/kerobot/items/ffadec344d3f3f3a4587
+- https://qiita.com/tnishiki/items/f51959c94412c43e7fa5
+- https://blog.beachside.dev/entry/2019/11/21/190000
+
+#### UserSecrets
+
+- 参考: 
+  - https://learn.microsoft.com/ja-jp/aspnet/core/security/app-secrets?view=aspnetcore-7.0&tabs=windows
+  - https://qiita.com/tnishiki/items/0c3e73ed28a66591d676
+  - https://araramistudio.jimdo.com/2021/10/18/c-azure-app-service%E3%81%A7%E7%92%B0%E5%A2%83%E5%A4%89%E6%95%B0%E3%82%92%E5%88%A9%E7%94%A8%E3%81%99%E3%82%8B/
+  - https://tech-lab.sios.jp/archives/33304
+
+- パッケージインストール
+```bash
+dotnet add package Microsoft.Extensions.Configuration
+dotnet add package Microsoft.Extensions.Configuration.UserSecrets
+```
+- 初期化
+```bash
+dotnet user-secrets init
+```
+- 設定(ローカル環境)
+```bash
+dotnet user-secrets set "super-secret-key" "hoge"
+```
+- 設定(Azure環境)
+  - App Service -> 構成 -> アプリケーション設定 から「新しいアプリケーション設定」で設定可能。
+-以下のように参照できる。
+```cs
+private readonly IConfiguration _configuration;
+:
+:
+var str = _configuration["super-secret-key"]; // "hoge"
+```
+
 
 ##  asp.net全体、特にDIコンテナ
 
@@ -132,6 +176,7 @@ app.Map("/world", world => {
 ### swagger
 
 - https://blog.beachside.dev/entry/2021/01/22/123000
+- https://learn.microsoft.com/ja-jp/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-7.0&tabs=visual-studio
 
 ## REST APIの設計
 

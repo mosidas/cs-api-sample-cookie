@@ -12,6 +12,7 @@ namespace plain.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/[controller]")]
+[Produces("application/json")]
 public class IssueController : ControllerBase
 {
     private readonly ILogger<IssueController> _logger;
@@ -20,10 +21,11 @@ public class IssueController : ControllerBase
     private readonly IConfiguration _configuration;
 
     /// <summary>
-    /// コンストラクター
+    /// コンストラクタ
     /// </summary>
     /// <param name="logger"></param>
     /// <param name="issueRepository"></param>
+    /// <param name="configuration"></param>
     public IssueController(ILogger<IssueController> logger, IIssueRepository issueRepository, IConfiguration configuration)
     {
         _logger = logger;
@@ -39,6 +41,8 @@ public class IssueController : ControllerBase
     /// <response code="200">成功</response>
     /// <response code="500">失敗</response>
     [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public ActionResult<IssueResponce> Get()
     {
         var issues = new IssueResponce(_issueRepository.GetAll());
@@ -56,9 +60,14 @@ public class IssueController : ControllerBase
     /// <param name="id">issueのID</param>
     /// <returns>issue</returns>
     /// <response code="200">成功</response>
+    /// <response code="401">認証エラー</response>
     /// <response code="404">指定したIDのissueは存在しない</response>
     /// <response code="500">サーバーエラー</response>
     [HttpGet("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public ActionResult<IssueResponce> Get(int id)
     {
         var issue = _issueRepository.Get(id);
@@ -77,15 +86,25 @@ public class IssueController : ControllerBase
     /// </summary>
     /// <param name="issue">issue</param>
     /// <returns>追加したissue</returns>
-    /// <response code="200">成功</response>
+    /// <response code="201">成功</response>
     /// <response code="400">リクエストボディがnull</response>
     /// <response code="401">認証エラー</response>
     /// <response code="409">IDが重複している</response>
     /// <response code="500">失敗</response>
     [HttpPost]
     [Authorize]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public ActionResult<IssueResponce> Post(IssueRequest issue)
     {
+        if (issue == null)
+        {
+            return BadRequest(new IssueResponce(new List<Issue>(), "Request body is null."));
+        }
+
         var newIssue = _issueRepository.Add(issue.Issue);
         if (newIssue == null)
         {
@@ -111,8 +130,18 @@ public class IssueController : ControllerBase
     /// <response code="500">失敗</response>
     [HttpPut("{id}")]
     [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public ActionResult<IssueResponce> Put(int id, [FromBody] IssueRequest issue)
     {
+        if(issue == null)
+        {
+            return BadRequest(new IssueResponce(new List<Issue>(), "Request body is null."));
+        }
+
         var ret = _issueRepository.Update(issue.Issue);
         if (!ret)
         {
@@ -135,6 +164,10 @@ public class IssueController : ControllerBase
     /// <response code="500">失敗</response>
     [HttpDelete("{id}")]
     [Authorize]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public ActionResult<IssueResponce> Delete(int id)
     {
         var ret = _issueRepository.Delete(id);

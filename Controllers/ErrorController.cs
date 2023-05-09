@@ -11,12 +11,14 @@ namespace plain.Controllers;
 public class ErrorController : ControllerBase
 {
     [Route("/error")]
+    [HttpGet]
     public IActionResult Error()
     {
         return Problem();
     }
 
     [Route("/error-development")]
+    [HttpGet]
     public IActionResult HandleErrorDevelopment(
     [FromServices] IHostEnvironment hostEnvironment)
     {

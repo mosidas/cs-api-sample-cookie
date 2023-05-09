@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using plain.Filters;
 using plain.Services;
 using plain.Helpers;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +26,10 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new() { Title = "sample", Version = "v1" });
     c.EnableAnnotations();
+    // Set the XML comments file path for Swagger
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    c.IncludeXmlComments(xmlPath);
 });
 
 var jwtSettings = builder.Configuration.GetSection("Jwt");
@@ -88,5 +93,7 @@ app.MapControllerRoute(
 app.MapFallbackToFile("index.html");
 
 app.UseSwagger();
-app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "plain v1"));
+app.UseSwaggerUI(c => {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "plain v1");
+    });
 app.Run();

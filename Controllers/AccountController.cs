@@ -8,6 +8,7 @@ namespace plain.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Produces("application/json")]
 public class AccountController : ControllerBase
 {
     private readonly ILogger<AccountController> _logger;
@@ -19,13 +20,19 @@ public class AccountController : ControllerBase
         _jwtHelper = jwtHelper;
     }
 
-    [HttpPost("register")]
-    [AllowAnonymous]
     /// <summary>
     /// POST: api/account/register
     /// </summary>
-    /// <param name="request">リクエストボディ</param>
-    /// <returns>レスポンス</returns>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    /// <response code="200">成功</response>
+    /// <response code="400">失敗</response>
+    /// <response code="500">失敗</response>
+    [HttpPost("register")]
+    [AllowAnonymous]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public ActionResult<RegisterResponse> Register(RegisterRequest request)
     {
 
@@ -47,8 +54,14 @@ public class AccountController : ControllerBase
     /// </summary>
     /// <param name="request">リクエストボディ</param>
     /// <returns>レスポンス</returns>
+    /// <response code="200">成功</response>
+    /// <response code="400">失敗</response>
+    /// <response code="500">失敗</response>
     [HttpPost("login")]
     [AllowAnonymous]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public ActionResult<LoginResponse> Login(LoginRequest request)
     {
         if (request == null)
@@ -56,13 +69,13 @@ public class AccountController : ControllerBase
             return BadRequest(new {message = "Request body is null."});
         }
         // TODO: ユーザー認証
-        throw new ArgumentException("hoge");
+        // throw new ArgumentException("hoge");
 
-        // var userId = Guid.NewGuid().ToString();
-        // var userName = request.Id.ToString();
+        var userId = Guid.NewGuid().ToString();
+        var userName = request.Id.ToString();
 
-        // var token = _jwtHelper.GenerateJwtToken(userId.ToString(), userName);
+        var token = _jwtHelper.GenerateJwtToken(userId.ToString(), userName);
 
-        // return Ok(new LoginResponse(token));
+        return Ok(new LoginResponse(token));
     }
 }

@@ -44,7 +44,7 @@ public class Issue
 
     /// <summary>
     /// 作成日時
-    /// <summary>
+    /// </summary>
     /// <value></value>
     public DateTime CreatedAt { get; set; }
 
