@@ -3,6 +3,7 @@ using plain.Services;
 using System.Reflection;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using plain.Helpers;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,11 +19,32 @@ builder.Services
     .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
+        options.Cookie.Name = "sampledscvkvmvmeopk";
         options.Cookie.HttpOnly = true;
         options.Cookie.SameSite = SameSiteMode.Lax;
         options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
         //options.Cookie.IsEssential = true;
         //options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+        options.Events.OnRedirectToLogin = cxt =>
+        {
+            // リダイレクトせずにエラーを返す
+            cxt.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            cxt.Response.Headers.Append("Content-Type","application/json; charset=utf-8");
+            cxt.Response.Body.WriteAsync(Encoding.UTF8.GetBytes("""
+            {
+                "status":"401",
+                "message":"Unauthorized!!!"
+            }
+            """));
+            return Task.CompletedTask;
+        };
+        options.Events.OnRedirectToAccessDenied = cxt =>
+        {
+            // リダイレクトせずにエラーを返す
+            cxt.Response.StatusCode = StatusCodes.Status403Forbidden;
+            return Task.CompletedTask;
+        };
+        options.Events.OnRedirectToLogout = cxt => Task.CompletedTask;
     });
 
 
