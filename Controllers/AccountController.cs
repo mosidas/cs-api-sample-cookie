@@ -1,7 +1,9 @@
 using plain.Models;
-using plain.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using plain.Helpers;
 
 namespace plain.Controllers;
 
@@ -12,12 +14,12 @@ namespace plain.Controllers;
 public class AccountController : ControllerBase
 {
     private readonly ILogger<AccountController> _logger;
-    private readonly JwtHelper _jwtHelper;
+    private readonly CookieHelper _cookieHelper;
 
-    public AccountController(ILogger<AccountController> logger, JwtHelper jwtHelper)
+    public AccountController(ILogger<AccountController> logger, CookieHelper cookieHelper)
     {
         _logger = logger;
-        _jwtHelper = jwtHelper;
+        _cookieHelper = cookieHelper;
     }
 
     /// <summary>
@@ -62,20 +64,27 @@ public class AccountController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public ActionResult<LoginResponse> Login(LoginRequest request)
+    public async Task<ActionResult<LoginResponse>> LoginAsync(LoginRequest request)
     {
         if (request == null)
         {
             return BadRequest(new {message = "Request body is null."});
         }
-        // TODO: ユーザー認証
-        // throw new ArgumentException("hoge");
 
-        var userId = Guid.NewGuid().ToString();
-        var userName = request.Id.ToString();
+        // TODO: validate request
 
-        var token = _jwtHelper.GenerateJwtToken(userId.ToString(), userName);
+        // make claims
+        var claims = _cookieHelper.GetClaimsPrincipal(request);
 
-        return Ok(new LoginResponse(token));
+        // make auth properties
+        var authProperties = _cookieHelper.GetAuthProperties();
+
+        // sign in
+        await HttpContext.SignInAsync(
+            CookieAuthenticationDefaults.AuthenticationScheme,
+            claims,
+            authProperties);
+
+        return Ok(new LoginResponse("success!"));
     }
 }

@@ -1,25 +1,35 @@
-using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using plain.Filters;
 using plain.Services;
-using plain.Helpers;
 using System.Reflection;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using plain.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddScoped<IAccountService, AccountService>();
-builder.Services.AddSingleton<JwtHelper>();
+builder.Services.AddSingleton<CookieHelper>();
 
 // TODO: Singleton --> Scoped
 builder.Services.AddSingleton<IIssueRepository, IssueRepository>();
 
+// cookie
+builder.Services
+    .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.Cookie.HttpOnly = true;
+        options.Cookie.SameSite = SameSiteMode.Lax;
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+        //options.Cookie.IsEssential = true;
+        //options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+    });
+
 
 builder.Services.AddControllers(options =>
-            {
-                options.Filters.Add(typeof(CommonFilter));
-            });
+{
+    options.Filters.Add(typeof(CommonFilter));
+});
 
 // swagger
 builder.Services.AddSwaggerGen(c =>
@@ -31,25 +41,6 @@ builder.Services.AddSwaggerGen(c =>
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     c.IncludeXmlComments(xmlPath);
 });
-
-var jwtSettings = builder.Configuration.GetSection("Jwt");
-var secretKey = jwtSettings.GetSection("SecretKey").Value??throw new ArgumentNullException("JWT SecretKey is null");
-var issuer = jwtSettings.GetSection("Issuer").Value??throw new ArgumentNullException("JWT Issuer is null");
-
-// JWTを有効にする
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-.AddJwtBearer(options =>
-{
-    options.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuer = true,
-        ValidIssuer = issuer,
-        ValidateAudience = false,
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
-    };
-});
-
 
 // ロギングの設定
 builder.Services.AddLogging(logging =>
@@ -93,7 +84,8 @@ app.MapControllerRoute(
 app.MapFallbackToFile("index.html");
 
 app.UseSwagger();
-app.UseSwaggerUI(c => {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "plain v1");
-    });
+app.UseSwaggerUI(c => 
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "plain v1");
+});
 app.Run();

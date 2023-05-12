@@ -41,6 +41,7 @@ public class IssueController : ControllerBase
     /// <response code="200">成功</response>
     /// <response code="500">失敗</response>
     [HttpGet]
+    [Authorize]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public ActionResult<IssueResponce> Get()
