@@ -87,4 +87,22 @@ public class AccountController : ControllerBase
 
         return Ok(new LoginResponse("success!"));
     }
+
+    /// <summary>
+    /// POST: api/account/logout
+    /// </summary>
+    /// <returns>レスポンス</returns>
+    /// <response code="200">成功</response>
+    /// <response code="400">失敗</response>
+    /// <response code="500">失敗</response>
+    [HttpPost("logout")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<LogoutResponse>> LogoutAsync()
+    {
+        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        return Ok(new LogoutResponse("success!"));
+    }
 }

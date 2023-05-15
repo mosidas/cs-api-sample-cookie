@@ -50,3 +50,6 @@ Content-Type: application/json
     "id": 123,
     "password": "bar"
 }
+
+### logout
+POST http://localhost:5185/api/account/logout
